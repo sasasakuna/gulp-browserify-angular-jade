@@ -3,10 +3,8 @@ var gulp = require('gulp');
 var connect = require('gulp-connect');
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
-var minifyCSS = require('gulp-minify-css');
-var clean = require('gulp-clean');
-var browserify = require('gulp-browserify');
 var concat = require('gulp-concat');
+var jade = require('gulp-jade');
 
 gulp.task('lint', function(){
 	gulp.src(['./app/**/*.js','!./app/bower_components/**'])
@@ -15,32 +13,14 @@ gulp.task('lint', function(){
 	.pipe(jshint.reporter('fail'));
 });
 
-gulp.task('clean', function(){
-	gulp.src('./dist/*')
-	.pipe(clean({force: true}));
-	gulp.src('./app/js/bundled.js')
-	.pipe(clean({force: true}));
-});
-
-gulp.task('minify-css', function(){
-	var opts = {comments: true, spare: true};
-	gulp.src(['./app/**/*.css', '!./app/bower_components/**'])
-	.pipe(minifyCSS(opts))
-	.pipe(gulp.dest('./dist'))
-});
-
 gulp.task('minify-js', function(){
-	gulp.src(['./app/**/*.js', '!./app/bower_components/**'])
+	gulp.src('./app/**/*.js')
 	.pipe(uglify({
 
 	}))
 	.pipe(gulp.dest('./dist/'))
 });
 
-gulp.task('copy-bower-components', function(){
-	gulp.src('./app/bower_components/**')
-	.pipe(gulp.dest('dist/bower_components'));
-});
 
 gulp.task('copy-html-files', function(){
 	gulp.src('./app/**/*.html')
@@ -61,26 +41,11 @@ gulp.task('connectDist', function(){
 	});
 });
 
-gulp.task('browserify', function(){
-	gulp.src(['app/js/main.js'])
-	.pipe(browserify({
-		insertGlobals: true,
-		debug: true
-	}))
-	.pipe(concat('bundled.js'))
-	.pipe(gulp.dest('./app/js'))
-});
 
-gulp.task('browserifyDist', function(){
-	gulp.src(['app/js/main.js'])
-	.pipe(browserify({
-		insertGlobals: true,
-		debug: true
-	}))
-	.pipe(concat('bundled.js'))
-	.pipe(gulp.dest('./dist/js'))
-});
+gulp.task('jade', function(){
+	gulp.src('./app/jade/**/*.jade')
+		.pipe(jade())
+		.pipe('dist/views/');
+})
 
-gulp.task('default', ['clean','lint', 'browserify', 'connect']);
-
-gulp.task('build', ['clean','lint', 'minify-css', 'browserifyDist', 'copy-html-files', 'copy-bower-components', 'connectDist']);
+gulp.task('default', ['lint', 'connect']);
