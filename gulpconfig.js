@@ -1,10 +1,17 @@
-var gulp = require('gulp');
+var src = './app/',
+	dest = './dest/';
 
-var connect = require('gulp-connect');
-
-gulp.task('connect', function(){
-	connect.server({
-		root: 'app/',
-		port:8888
-	});
-})
+module.exports = {
+	style: {
+		src: src + 'stylesheets/**/*.scss',
+		dest: dest + 'css/'
+	},
+	jade: {
+		src: src + 'jade/**/*.jade',
+		dest: dest + 'views/'
+	},
+	browserify: {
+		src: src + 'js/main.js',
+		dest: dest + 'js/'
+	}
+};
