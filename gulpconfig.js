@@ -3,11 +3,12 @@ var src = './app/',
 
 module.exports = {
 	style: {
-		src: src + 'stylesheets/**/*.scss',
+		src: src + 'css/**/*.scss',
 		dest: dest + 'css/'
 	},
 	jade: {
-		src: src + 'jade/**/*.jade',
+
+		src: src + 'views/**/*.jade',
 		dest: dest + 'views/'
 	},
 	browserify: {
